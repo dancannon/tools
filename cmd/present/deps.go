@@ -6,7 +6,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"path/filepath"
@@ -15,15 +14,14 @@ import (
 	"golang.org/x/tools/godoc/static"
 )
 
-var playScripts = []string{"playground.js", "play.js"}
+var depsScripts = []string{"jquery.js", "jquery-ui.js"}
 
-// playScript registers an HTTP handler at /play.js that serves all the
-// scripts specified by the variable above, and appends a line that
-// initializes the playground with the specified transport.
-func playScript(root, transport string) {
+// depsScript registers an HTTP handler at /deps.js that serves all the
+// scripts specified by the variable above.
+func depsScript(root, transport string) {
 	modTime := time.Now()
 	var buf bytes.Buffer
-	for _, p := range playScripts {
+	for _, p := range depsScripts {
 		if s, ok := static.Files[p]; ok {
 			buf.WriteString(s)
 			continue
@@ -34,9 +32,8 @@ func playScript(root, transport string) {
 		}
 		buf.Write(b)
 	}
-	fmt.Fprintf(&buf, "\ninitPlayground(new %v());\n", transport)
 	b := buf.Bytes()
-	http.HandleFunc("/play.js", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/deps.js", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-type", "application/javascript")
 		http.ServeContent(w, r, "", modTime, bytes.NewReader(b))
 	})

@@ -18,6 +18,7 @@ var basePath = "./present/"
 
 func init() {
 	initTemplates(basePath)
+	depsScript(basePath, "HTTPTransport")
 	playScript(basePath, "HTTPTransport")
 	present.PlayEnabled = true
 

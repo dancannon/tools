@@ -89,6 +89,7 @@ func main() {
 		playScript(basePath, "SocketTransport")
 		http.Handle("/socket", socket.NewHandler(origin))
 	}
+	depsScript(basePath, "SocketTransport")
 	http.Handle("/static/", http.FileServer(http.Dir(basePath)))
 
 	if !ln.Addr().(*net.TCPAddr).IP.IsLoopback() &&
